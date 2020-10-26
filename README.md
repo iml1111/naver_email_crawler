@@ -10,7 +10,8 @@ $ pip install -r requirements.txt
 ```python
 >>> from crawler import Crawler
 >>> crawler = Crawler()
->>> result = crawler.process()
+# max_idx: 최대 탐색 페이지 인덱스
+>>> result = crawler.process(max_idx=5)
 >>> result
 [
     "aaa@naver.com",
