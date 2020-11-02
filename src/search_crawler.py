@@ -13,7 +13,7 @@ class SearchCrawler:
     def __init__(self):
         self.url = "https://section.blog.naver.com/Search/Post.nhn?pageNo=%s&rangeType=ALL&orderBy=%s&keyword=%s"
 
-    def process(self, keyword="다이어트", max_idx=300, order_by="sim"):
+    def process(self, keyword="다이어트", max_idx=571, order_by="sim"):
         email_list = []
         for idx in tqdm(list(range(1, max_idx + 1))[:]):
             url = self._get_url(keyword, idx, order_by)
