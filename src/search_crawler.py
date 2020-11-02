@@ -11,12 +11,11 @@ from chrome_driver import get_driver
 class SearchCrawler:
     '''crawler Class'''
     def __init__(self):
-        self.url = "https://section.blog.naver.com/Search/Post.nhn?\
-                    pageNo=%s&rangeType=ALL&orderBy=%s&keyword=%s"
+        self.url = "https://section.blog.naver.com/Search/Post.nhn?pageNo=%s&rangeType=ALL&orderBy=%s&keyword=%s"
 
     def process(self, keyword="다이어트", max_idx=300, order_by="sim"):
         email_list = []
-        for idx in tqdm(list(range(1, max_idx + 1))):
+        for idx in tqdm(list(range(1, max_idx + 1))[:]):
             url = self._get_url(keyword, idx, order_by)
             sub_list = self.get_user_list(url)
             email_list.extend(sub_list)
@@ -29,7 +28,7 @@ class SearchCrawler:
     def get_user_list(self, url):
         '''해당 페이지의 각 블로거의 이메일 수집'''
         user_list = []
-        for _ in range(10):
+        for _ in range(5):
             try:
                 driver = get_driver()
                 driver.get(url)
