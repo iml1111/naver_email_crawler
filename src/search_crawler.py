@@ -1,51 +1,43 @@
 '''
-네이버 블로그 이메일 수집 모듈
+네이버 블로그 이메일 수집 모듈 (검색 탭)
 '''
 import time
 import csv
 from bs4 import BeautifulSoup as bs
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from tqdm import tqdm
 from chrome_driver import get_driver
-from category_list import category_list
 
 
-class Crawler:
-    '''Crawler Class'''
+class SearchCrawler:
+    '''crawler Class'''
     def __init__(self):
-        self.url = "https://section.blog.naver.com/ThemePost.nhn?\
-                    activeDirectorySeq=%s&directoryNo=%s&currentPage=%s"
-        self.category_list = category_list
+        self.url = "https://section.blog.naver.com/Search/Post.nhn?\
+                    pageNo=%s&rangeType=ALL&orderBy=%s&keyword=%s"
 
-    def process(self, max_idx=5):
-        '''All Process'''
+    def process(self, keyword="다이어트", max_idx=300, order_by="sim"):
         email_list = []
-        for dir_num, category in tqdm(self.category_list):
-            for idx in range(1, max_idx + 1):
-                sub_list = self.get_user_list(dir_num, idx, category)
-                email_list.extend(sub_list)
+        for idx in tqdm(list(range(1, max_idx + 1))):
+            url = self._get_url(keyword, idx, order_by)
+            sub_list = self.get_user_list(url)
+            email_list.extend(sub_list)
         return email_list
 
-    def _get_url(self, dir_num, currentPage):
-        '''네이버 블로그 카테고리 url 포맷 변환'''
-        return self.url % (dir_num[0], dir_num[1], currentPage)
+    def _get_url(self, keyword, idx, order_by):
+        '''네이버 블로그 검색 url 포맷 변환'''
+        return self.url % (idx, order_by, keyword)
 
-    def get_user_list(self, dir_num, idx, category):
+    def get_user_list(self, url):
         '''해당 페이지의 각 블로거의 이메일 수집'''
         user_list = []
         for _ in range(10):
             try:
                 driver = get_driver()
-                driver.get(self._get_url(dir_num, idx))
+                driver.get(url)
                 time.sleep(3)
-                # WebDriverWait(driver, 100).until(
-                #     EC.presence_of_element_located((By.CSS_SELECTOR, "a.author")))
                 soup = bs(driver.page_source, "html.parser")
                 break
             except:
-                print("Page 접근 실패...")
+                print("page 접근 실패...")
         a_tags = soup.select("a.author")
 
         for a_tag in a_tags:
@@ -60,11 +52,9 @@ class Crawler:
             user_list.append(
                 {
                     "email": email,
-                    "category": category,
                     "name": name
                 }
             )
-
         driver.close()
         return user_list
 
@@ -74,12 +64,12 @@ class Crawler:
         email_set = set()
         for user in user_list:
             if user['email'] not in email_set:
-                wr.writerow([user['name'], user['email'], user['category']])
+                wr.writerow([user['name'], user['email']])
                 email_set.add(user['email'])
         f.close()
 
 
 if __name__ == '__main__':
-    crawler = Crawler()
+    crawler = SearchCrawler()
     result = crawler.process()
     crawler.export_csv(result)
