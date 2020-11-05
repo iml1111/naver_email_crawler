@@ -13,9 +13,9 @@ class SearchCrawler:
     def __init__(self):
         self.url = "https://section.blog.naver.com/Search/Post.nhn?pageNo=%s&rangeType=ALL&orderBy=%s&keyword=%s"
 
-    def process(self, keyword="다이어트", max_idx=571, order_by="sim"):
+    def process(self, keyword="다이어트", min_idx=1, max_idx=571, order_by="sim"):
         email_list = []
-        for idx in tqdm(list(range(1, max_idx + 1))[:]):
+        for idx in tqdm(list(range(min_idx, max_idx + 1))[:]):
             url = self._get_url(keyword, idx, order_by)
             sub_list = self.get_user_list(url)
             email_list.extend(sub_list)
@@ -70,5 +70,6 @@ class SearchCrawler:
 
 if __name__ == '__main__':
     crawler = SearchCrawler()
-    result = crawler.process()
-    crawler.export_csv(result)
+    result = crawler.process(keyword="트레이너", max_idx=572)
+    result2 = crawler.process(keyword="코치", max_idx=570)
+    crawler.export_csv(result + result2)
