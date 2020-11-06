@@ -3,7 +3,7 @@ Selenium Chrome Driver Management Module
 '''
 from selenium import webdriver
 
-DRIVER_PATH = "./webdriver/chromedriver_win86"
+DRIVER_PATH = "./webdriver/chromedriver_mac86"
 WAIT_SEC = 5
 
 
