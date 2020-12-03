@@ -13,7 +13,7 @@ class SearchCrawler:
     def __init__(self):
         self.url = "https://section.blog.naver.com/Search/Post.nhn?pageNo=%s&rangeType=ALL&orderBy=%s&keyword=%s"
 
-    def process(self, keyword="다이어트", min_idx=1, max_idx=571, order_by="sim"):
+    def process(self, keyword, min_idx=1, max_idx=571, order_by="sim"):
         email_list = []
         for idx in tqdm(list(range(min_idx, max_idx + 1))[:]):
             url = self._get_url(keyword, idx, order_by)
@@ -70,6 +70,16 @@ class SearchCrawler:
 
 if __name__ == '__main__':
     crawler = SearchCrawler()
-    result = crawler.process(keyword="트레이너", max_idx=572)
-    result2 = crawler.process(keyword="코치", max_idx=570)
-    crawler.export_csv(result + result2)
+    result = []
+    result.extend(crawler.process(keyword="운동", max_idx=573))
+    result.extend(crawler.process(keyword="건강", max_idx=573))
+    result.extend(crawler.process(keyword="라이프스타일", max_idx=573))
+    result.extend(crawler.process(keyword="음료", max_idx=573))
+    result.extend(crawler.process(keyword="요리", max_idx=573))
+    result.extend(crawler.process(keyword="미술", max_idx=573))
+    result.extend(crawler.process(keyword="커리어", max_idx=573))
+    result.extend(crawler.process(keyword="공예", max_idx=573))
+    result.extend(crawler.process(keyword="사진", max_idx=573))
+    result.extend(crawler.process(keyword="영상", max_idx=573))
+    result.extend(crawler.process(keyword="음악", max_idx=573))
+    crawler.export_csv(result)
