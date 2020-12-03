@@ -78,5 +78,5 @@ if __name__ == '__main__':
     ]
     for i in targets:
         print("%s 크롤링 시작..." % i)
-    result.extend(crawler.process(keyword=i, max_idx=573))
+        result.extend(crawler.process(keyword=i, max_idx=573))
     crawler.export_csv(result)
