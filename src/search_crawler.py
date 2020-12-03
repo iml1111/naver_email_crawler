@@ -71,15 +71,12 @@ class SearchCrawler:
 if __name__ == '__main__':
     crawler = SearchCrawler()
     result = []
-    result.extend(crawler.process(keyword="운동", max_idx=573))
-    result.extend(crawler.process(keyword="건강", max_idx=573))
-    result.extend(crawler.process(keyword="라이프스타일", max_idx=573))
-    result.extend(crawler.process(keyword="음료", max_idx=573))
-    result.extend(crawler.process(keyword="요리", max_idx=573))
-    result.extend(crawler.process(keyword="미술", max_idx=573))
-    result.extend(crawler.process(keyword="커리어", max_idx=573))
-    result.extend(crawler.process(keyword="공예", max_idx=573))
-    result.extend(crawler.process(keyword="사진", max_idx=573))
-    result.extend(crawler.process(keyword="영상", max_idx=573))
-    result.extend(crawler.process(keyword="음악", max_idx=573))
+    targets = [
+        '운동', '건강', '라이프스타일', 
+        '음료', '요리', '미술', '커리어', 
+        '공예', '사진', '영상', '음악'
+    ]
+    for i in targets:
+        print("%s 크롤링 시작..." % i)
+    result.extend(crawler.process(keyword=i, max_idx=573))
     crawler.export_csv(result)
