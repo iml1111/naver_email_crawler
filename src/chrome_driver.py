@@ -1,13 +1,19 @@
 '''
 Selenium Chrome Driver Management Module
 '''
+from platform import system
 from selenium import webdriver
 
-DRIVER_PATH = "./webdriver/chromedriver_win87"
+DRIVER_PATH = "./webdriver/chromedriver.%s.%s"
+PLATFORM = {
+    'Windows':'win',
+    'Darwin': 'mac',
+    "Linux": 'linux'
+}
 WAIT_SEC = 5
 
 
-def get_driver():
+def get_driver(version):
     '''
     Get Selenium Chrome Webdriver function
 
@@ -30,7 +36,10 @@ def get_driver():
     options.add_argument("user-agent=" + header['User-Agent'])
     options.add_argument("lang=ko_KR")
 
-    driver = webdriver.Chrome(DRIVER_PATH, chrome_options=options)
-    driver.implicitly_wait(10)
+    driver = webdriver.Chrome(
+        DRIVER_PATH % (PLATFORM[system()], version), 
+        chrome_options=options
+    )
+    driver.implicitly_wait(3)
 
     return driver
